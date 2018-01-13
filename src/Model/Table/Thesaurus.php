@@ -20,20 +20,20 @@ class Thesaurus
     public function insertIgnore(
         int $wordId,
         int $synonymWordId
-    ) {
+    ) : int {
         $sql = '
             INSERT IGNORE
-              INTO `thesaurus` (`word_id`, `sysnonym_word_id`)
+              INTO `thesaurus` (`word_id`, `synonym_word_id`)
             VALUES (?, ?)
                  ;
         ';
         $parameters = [
-            $word,
+            $wordId,
             $synonymWordId,
         ];
-        return $this->adapter
-                    ->query($sql, $parameters)
-                    ->getGeneratedValue();
+        return (int) $this->adapter
+                          ->query($sql, $parameters)
+                          ->getGeneratedValue();
     }
 
     /**

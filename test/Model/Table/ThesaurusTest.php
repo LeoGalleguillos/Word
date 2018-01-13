@@ -41,4 +41,12 @@ class ThesaurusTest extends TableTestCase
     {
         $this->assertInstanceOf(WordTable\Thesaurus::class, $this->thesaurusTable);
     }
+
+    public function testInsertIgnore()
+    {
+        $this->assertSame(
+            0,
+            $this->thesaurusTable->insertIgnore(1, 1)
+        );
+    }
 }
