@@ -12,29 +12,33 @@ class Word
     }
 
     /**
-     * @return int Primary key
+     * Insert ignore.
+     *
+     * @param string $word
+     * @return int Primary key or 0 for failed insert
      */
-    public function insert(
-        string $domain,
-        string $name,
-        string $googleAnalyticsTrackingId
+    public function insertIgnore(
+        string $word
     ) {
         $sql = '
-            INSERT
-              INTO `word` (`domain`, `name`, `google_analytics_tracking_id`)
-            VALUES (?, ?, ?)
+            INSERT IGNORE
+              INTO `word` (`word`)
+            VALUES (?)
                  ;
         ';
         $parameters = [
-            $domain,
-            $name,
-            $googleAnalyticsTrackingId,
+            $word,
         ];
         return $this->adapter
                     ->query($sql, $parameters)
                     ->getGeneratedValue();
     }
 
+    /**
+     * Select count.
+     *
+     * @return int
+     */
     public function selectCount()
     {
         $sql = '
@@ -47,6 +51,9 @@ class Word
     }
 
     /**
+     * Select where word ID.
+     *
+     * @param int $wordId
      * @return ArrayObject
      */
     public function selectWhereWordId(int $wordId) : ArrayObject
