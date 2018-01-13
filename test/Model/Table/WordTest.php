@@ -56,4 +56,17 @@ class WordTest extends TestCase
             $this->wordTable->insertIgnore('word')
         );
     }
+
+    public function testSelectCount()
+    {
+        $this->assertSame(
+            0,
+            $this->wordTable->selectCount()
+        );
+        $this->wordTable->insertIgnore('word');
+        $this->assertSame(
+            1,
+            $this->wordTable->selectCount()
+        );
+    }
 }
