@@ -40,4 +40,20 @@ class WordTest extends TestCase
     {
         $this->assertInstanceOf(WordTable\Word::class, $this->wordTable);
     }
+
+    public function testInsertIgnore()
+    {
+        $this->assertSame(
+            1,
+            $this->wordTable->insertIgnore('word')
+        );
+        $this->assertSame(
+            2,
+            $this->wordTable->insertIgnore('another')
+        );
+        $this->assertSame(
+            0,
+            $this->wordTable->insertIgnore('word')
+        );
+    }
 }

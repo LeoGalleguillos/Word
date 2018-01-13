@@ -29,9 +29,9 @@ class Word
         $parameters = [
             $word,
         ];
-        return $this->adapter
-                    ->query($sql, $parameters)
-                    ->getGeneratedValue();
+        return (int) $this->adapter
+                          ->query($sql, $parameters)
+                          ->getGeneratedValue();
     }
 
     /**
