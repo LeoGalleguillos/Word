@@ -10,6 +10,11 @@ class TableTestCase extends TestCase
      */
     protected $sqlDirectory = __DIR__ . '/../sql/';
 
+    /**
+     * @var string
+     */
+    protected $sqlDatabaseDirectory = __DIR__ . '/../sql/leogalle_test/';
+
     protected function setForeignKeyChecks0()
     {
         $sql     = file_get_contents(

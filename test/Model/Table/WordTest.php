@@ -58,6 +58,10 @@ class WordTest extends TableTestCase
             0,
             $this->wordTable->insertIgnore('word')
         );
+        $this->assertSame(
+            4,
+            $this->wordTable->insertIgnore('again')
+        );
     }
 
     public function testSelectCount()

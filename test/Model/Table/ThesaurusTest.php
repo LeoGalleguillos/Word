@@ -20,6 +20,7 @@ class ThesaurusTest extends TableTestCase
         $configArray     = $configArray['db']['adapters']['leogalle_test'];
         $this->adapter   = new Adapter($configArray);
         $this->thesaurusTable = new WordTable\Thesaurus($this->adapter);
+        $this->wordTable      = new WordTable\Word($this->adapter);
 
         $this->dropTable();
         $this->createTable();
@@ -27,13 +28,13 @@ class ThesaurusTest extends TableTestCase
 
     protected function dropTable()
     {
-        $sql = file_get_contents($this->sqlPath . 'drop.sql');
+        $sql = file_get_contents($this->sqlDatabaseDirectory . '/thesaurus/drop.sql');
         $result = $this->adapter->query($sql)->execute();
     }
 
     protected function createTable()
     {
-        $sql = file_get_contents($this->sqlPath . 'create.sql');
+        $sql = file_get_contents($this->sqlDatabaseDirectory . '/thesaurus/create.sql');
         $result = $this->adapter->query($sql)->execute();
     }
 
@@ -44,9 +45,10 @@ class ThesaurusTest extends TableTestCase
 
     public function testInsertIgnore()
     {
+        $this->wordTable->insertIgnore('hello');
         $this->assertSame(
-            0,
-            $this->thesaurusTable->insertIgnore(1, 1)
+            true,
+            $this->thesaurusTable->insertIgnore(1, 2)
         );
     }
 }
