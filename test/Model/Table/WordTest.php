@@ -2,11 +2,12 @@
 namespace LeoGalleguillos\WordTest\Model\Table;
 
 use ArrayObject;
+use LeoGalleguillos\WordTest\TableTestCase;
 use LeoGalleguillos\Word\Model\Table as WordTable;
 use Zend\Db\Adapter\Adapter;
 use PHPUnit\Framework\TestCase;
 
-class WordTest extends TestCase
+class WordTest extends TableTestCase
 {
     /**
      * @var string
@@ -20,8 +21,10 @@ class WordTest extends TestCase
         $this->adapter   = new Adapter($configArray);
         $this->wordTable = new WordTable\Word($this->adapter);
 
+        $this->setForeignKeyChecks0();
         $this->dropTable();
         $this->createTable();
+        $this->setForeignKeyChecks1();
     }
 
     protected function dropTable()
