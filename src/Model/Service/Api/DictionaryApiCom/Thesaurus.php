@@ -14,7 +14,34 @@ class Thesaurus
         $this->apiKey    = $apiKey;
     }
 
-    protected function getXml(string $word)
+    public function getSynonyms(string $word) : array
+    {
+        $synonyms = [];
+
+        $simpleXmlElement = $this->getSimpleXmlElement($word);
+        foreach ($simpleXmlElement->{'entry'} as $entry) {
+            foreach ($entry->{'sens'} as $sense) {
+                $synonymsString = (string) $sense->{'syn'};
+                $synonymsArray  = explode(', ', $synonymsString);
+                $synonyms       = array_merge($synonyms, $synonymsArray);
+            }
+        }
+
+        $synonyms = array_unique($synonyms);
+
+        foreach ($synonyms as $index => $synonym) {
+            if ($word == $synonym) {
+                unset($synonyms[$index]);
+                break;
+            }
+        }
+
+        sort($synonyms);
+
+        return $synonyms;
+    }
+
+    protected function getSimpleXmlElement(string $word)
     {
         return new SimpleXmlElement(
             $this->getXmlString($word)

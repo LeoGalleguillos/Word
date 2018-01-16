@@ -32,10 +32,10 @@ class ThesaurusTest extends TestCase
         );
     }
 
-    public function testGetXml()
+    public function testGetSimpleXmlElement()
     {
         $reflectionClass = new ReflectionClass($this->thesaurusApi);
-        $reflectionMethod = $reflectionClass->getMethod('getXml');
+        $reflectionMethod = $reflectionClass->getMethod('getSimpleXmlElement');
         $reflectionMethod->setAccessible(true);
         $simpleXmlElement = $reflectionMethod->invokeArgs(
             $this->thesaurusApi,
@@ -44,6 +44,25 @@ class ThesaurusTest extends TestCase
         $this->assertInstanceOf(
             SimpleXMLElement::class,
             $simpleXmlElement
+        );
+    }
+
+    public function testGetSynonyms()
+    {
+        $synonyms = [
+            'essay',
+            'exam',
+            'experimentation',
+            'quiz',
+            'sample',
+            'strain',
+            'stretch',
+            'tax',
+            'trial',
+        ];
+        $this->assertSame(
+            $synonyms,
+            $this->thesaurusApi->getSynonyms('test')
         );
     }
 }
