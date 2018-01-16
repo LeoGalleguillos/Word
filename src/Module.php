@@ -35,7 +35,7 @@ class Module
                     );
                 },
                 WordTable\Thesaurus::class => function ($serviceManager) {
-                    return new WordTable\Word(
+                    return new WordTable\Thesaurus(
                         $serviceManager->get('word')
                     );
                 },
