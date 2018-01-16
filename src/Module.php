@@ -28,6 +28,12 @@ class Module
                         $serviceManager->get(WordTable\Word::class)
                     );
                 },
+                WordService\Api\DictionaryApiCom\Thesaurus::class => function ($serviceManager) {
+                    $config = $serviceManager->get('Config');
+                    return new WordService\Api\DictionaryApiCom\Thesaurus(
+                        $config['dictionaryapicom']['api_key']
+                    );
+                },
                 WordService\Thesaurus::class => function ($serviceManager) {
                     return new WordService\Thesaurus(
                         $serviceManager->get(WordFactory\Word::class),
