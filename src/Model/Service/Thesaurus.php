@@ -2,6 +2,7 @@
 namespace LeoGalleguillos\Word\Model\Service;
 
 use LeoGalleguillos\Word\Model\Entity as WordEntity;
+use LeoGalleguillos\Word\Model\Factory as WordFactory;
 use LeoGalleguillos\Word\Model\Table as WordTable;
 
 class Thesaurus
@@ -10,8 +11,10 @@ class Thesaurus
      * Construct.
      */
     public function __construct(
+        WordFactory\Word $wordFactory,
         WordTable\Thesaurus $thesaurusTable
     ) {
+        $this->wordFactory    = $wordFactory;
         $this->thesaurusTable = $thesaurusTable;
     }
 
@@ -29,5 +32,21 @@ class Thesaurus
         );
 
         return [];
+    }
+
+    public function getSynonymsFromMySql(
+        WordEntity\Word $wordEntity
+    ) : array {
+        $wordEntities = [];
+
+        $arrays = $this->thesaurusTable->selectWhereWordId(
+            $wordEntity->wordId
+        );
+
+        foreach ($arrays as $array) {
+
+        }
+
+        return $wordEntities;
     }
 }

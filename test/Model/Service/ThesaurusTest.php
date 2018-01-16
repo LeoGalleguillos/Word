@@ -13,10 +13,14 @@ class ThesaurusTest extends TestCase
 {
     protected function setUp()
     {
+        $this->wordFactoryMock = $this->createMock(
+            WordFactory\Word::class
+        );
         $this->thesaurusTableMock = $this->createMock(
             WordTable\Thesaurus::class
         );
         $this->thesaurusService = new WordService\Thesaurus(
+            $this->wordFactoryMock,
             $this->thesaurusTableMock
         );
     }
