@@ -48,26 +48,4 @@ class Thesaurus
         // return all word entities
         return [];
     }
-
-    /**
-     * Get synonyms from MySQL.
-     *
-     * @param WordEntity\Word $wordEntity
-     * @return WordEntity\Word[]
-     */
-    protected function getSynonymsFromMySql(
-        WordEntity\Word $wordEntity
-    ) : array {
-        $wordEntities = [];
-
-        $arrayObjects = $this->thesaurusTable->selectWhereWordId(
-            $wordEntity->wordId
-        );
-
-        foreach ($arrayObjects as $arrayObject) {
-            $wordEntities[] = $this->wordFactory->buildFromArrayObject($arrayObject);
-        }
-
-        return $wordEntities;
-    }
 }
