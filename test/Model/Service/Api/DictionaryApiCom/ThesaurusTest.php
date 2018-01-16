@@ -7,14 +7,16 @@ use LeoGalleguillos\Word\Model\Factory as WordFactory;
 use LeoGalleguillos\Word\Model\Service as WordService;
 use LeoGalleguillos\Word\Model\Table as WordTable;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
+use SimpleXMLElement;
 
 class ThesaurusTest extends TestCase
 {
     protected function setUp()
     {
+        $configArray = require(__DIR__ . '/../../../../../config/autoload/local.php');
+        $apiKey      = $configArray['dictionaryapicom']['api_key'];
         $this->thesaurusApi = new WordService\Api\DictionaryApiCom\Thesaurus(
-            'test'
+            $apiKey
         );
     }
 
@@ -23,6 +25,14 @@ class ThesaurusTest extends TestCase
         $this->assertInstanceOf(
             WordService\Api\DictionaryApiCom\Thesaurus::class,
             $this->thesaurusApi
+        );
+    }
+
+    public function testGetXml()
+    {
+        $this->assertInstanceOf(
+            SimpleXMLElement::class,
+            $this->thesaurusApi->getXml('test')
         );
     }
 }
