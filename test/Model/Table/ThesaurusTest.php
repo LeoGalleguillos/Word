@@ -9,11 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class ThesaurusTest extends TableTestCase
 {
-    /**
-     * @var string
-     */
-    protected $sqlPath = __DIR__ . '/../../..' . '/sql/leogalle_test/thesaurus/';
-
     protected function setUp()
     {
         $configArray     = require(__DIR__ . '/../../../config/autoload/local.php');
@@ -22,19 +17,27 @@ class ThesaurusTest extends TableTestCase
         $this->thesaurusTable = new WordTable\Thesaurus($this->adapter);
         $this->wordTable      = new WordTable\Word($this->adapter);
 
-        $this->dropTable();
-        $this->createTable();
+        $this->setForeignKeyChecks0();
+        $this->dropTables();
+        $this->createTables();
+        $this->setForeignKeyChecks1();
     }
 
-    protected function dropTable()
+    protected function dropTables()
     {
         $sql = file_get_contents($this->sqlDatabaseDirectory . '/thesaurus/drop.sql');
         $result = $this->adapter->query($sql)->execute();
+
+        $sql = file_get_contents($this->sqlDatabaseDirectory . '/word/drop.sql');
+        $result = $this->adapter->query($sql)->execute();
     }
 
-    protected function createTable()
+    protected function createTables()
     {
         $sql = file_get_contents($this->sqlDatabaseDirectory . '/thesaurus/create.sql');
+        $result = $this->adapter->query($sql)->execute();
+
+        $sql = file_get_contents($this->sqlDatabaseDirectory . '/word/create.sql');
         $result = $this->adapter->query($sql)->execute();
     }
 
@@ -46,9 +49,56 @@ class ThesaurusTest extends TableTestCase
     public function testInsertIgnore()
     {
         $this->wordTable->insertIgnore('hello');
-        $this->assertSame(
-            true,
+        $this->assertFalse(
             $this->thesaurusTable->insertIgnore(1, 2)
         );
+
+        $this->wordTable->insertIgnore('world');
+        $this->assertTrue(
+            $this->thesaurusTable->insertIgnore(1, 2)
+        );
+
+        $this->assertFalse(
+            $this->thesaurusTable->insertIgnore(1, 2)
+        );
+    }
+
+    public function testSelectWhereWordId()
+    {
+        $this->assertSame(
+            [],
+            $this->thesaurusTable->selectWhereWordId(123)
+        );
+
+        $this->wordTable->insertIgnore('hello');
+        $this->wordTable->insertIgnore('world');
+        $this->wordTable->insertIgnore('again');
+
+        $this->thesaurusTable->insertIgnore(1, 2);
+        $array = [
+            [
+                'word_id' => '2',
+                'word'    => 'world',
+                'thesaurus_updated' => null,
+            ],
+        ];
+        $this->assertSame(
+            $array,
+            $this->thesaurusTable->selectWhereWordId(1)
+        );
+
+        $this->thesaurusTable->insertIgnore(1, 2);
+        $array = [
+            [
+                'word_id' => '2',
+                'word'    => 'world',
+                'thesaurus_updated' => null,
+            ],
+            [
+                'word_id' => '3',
+                'word'    => 'again',
+                'thesaurus_updated' => null,
+            ],
+        ];
     }
 }
