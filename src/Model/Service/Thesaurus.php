@@ -27,24 +27,28 @@ class Thesaurus
     public function getSynonyms(
         WordEntity\Word $wordEntity
     ) : array {
-        $arrays = $this->thesaurusTable->selectWhereWordId(
-            $wordEntity->wordId
-        );
+        $wordEntities = $this->getSynonymsFromMySql($wordEntity);
 
-        return [];
+        return $wordEntities;
     }
 
+    /**
+     * Get synonyms from MySQL.
+     *
+     * @param WordEntity\Word $wordEntity
+     * @return WordEntity\Word[]
+     */
     public function getSynonymsFromMySql(
         WordEntity\Word $wordEntity
     ) : array {
         $wordEntities = [];
 
-        $arrays = $this->thesaurusTable->selectWhereWordId(
+        $arrayObjects = $this->thesaurusTable->selectWhereWordId(
             $wordEntity->wordId
         );
 
-        foreach ($arrays as $array) {
-
+        foreach ($arrayObjects as $arrayObject) {
+            $wordEntities[] = $this->wordFactory->buildFromArrayObject($arrayObject);
         }
 
         return $wordEntities;
