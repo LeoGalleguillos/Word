@@ -24,4 +24,22 @@ class WordTest extends TestCase
     {
         $this->assertInstanceOf(WordFactory\Word::class, $this->wordFactory);
     }
+
+    public function testBuildFromArrayObject()
+    {
+        $arrayObject = new ArrayObject([
+            'word_id'           => '1',
+            'word'              => 'word',
+            'thesaurus_updated' => null,
+        ]);
+        $wordEntity = new WordEntity\Word();
+        $wordEntity->wordId           = 1;
+        $wordEntity->word             = 'word';
+        $wordEntity->thesaurusUpdated = null;
+
+        $this->assertEquals(
+            $wordEntity,
+            $this->wordFactory->buildFromArrayObject($arrayObject)
+        );
+    }
 }
