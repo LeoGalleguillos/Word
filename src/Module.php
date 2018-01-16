@@ -25,13 +25,13 @@ class Module
             'factories' => [
                 WordFactory\Word::class => function ($serviceManager) {
                     return new WordFactory\Word(
-                        $servuceManager->get(WordTable\Word::class)
+                        $serviceManager->get(WordTable\Word::class)
                     );
                 },
                 WordService\Thesaurus::class => function ($serviceManager) {
                     return new WordService\Thesaurus(
-                        $servuceManager->get(WordFactory\Word::class),
-                        $servuceManager->get(WordTable\Thesaurus::class)
+                        $serviceManager->get(WordFactory\Word::class),
+                        $serviceManager->get(WordTable\Thesaurus::class)
                     );
                 },
                 WordTable\Thesaurus::class => function ($serviceManager) {
