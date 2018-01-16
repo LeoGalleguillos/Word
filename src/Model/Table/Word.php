@@ -7,6 +7,11 @@ use Zend\Db\Adapter\Adapter;
 
 class Word
 {
+    /**
+     * Construct.
+     *
+     * @param Adapter $adapter
+     */
     public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
