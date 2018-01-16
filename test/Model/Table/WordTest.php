@@ -78,6 +78,19 @@ class WordTest extends TableTestCase
         );
     }
 
+    public function testSelectCountWhereWord()
+    {
+        $this->assertSame(
+            0,
+            $this->wordTable->selectCountWhereWord('word')
+        );
+        $this->wordTable->insertIgnore('word');
+        $this->assertSame(
+            1,
+            $this->wordTable->selectCountWhereWord('word')
+        );
+    }
+
     public function testSelectThesaurusUpdatedWhereWordId()
     {
         try {

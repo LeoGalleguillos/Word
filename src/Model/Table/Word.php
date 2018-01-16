@@ -58,6 +58,24 @@ class Word
         return (int) $row['count'];
     }
 
+    /**
+     * Select count where word.
+     *
+     * @param string $word
+     * @return int
+     */
+    public function selectCountWhereWord(string $word) : int
+    {
+        $sql = '
+            SELECT COUNT(*) AS `count`
+              FROM `word`
+             WHERE `word`.`word` = ?
+                 ;
+        ';
+        $row = $this->adapter->query($sql, [$word])->current();
+        return (int) $row['count'];
+    }
+
     public function selectThesaurusUpdatedWhereWordId(int $wordId)
     {
         $sql = '
