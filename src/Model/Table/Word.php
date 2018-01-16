@@ -82,4 +82,21 @@ class Word
 
         return $arrayObject;
     }
+
+    /**
+     * Update set `thesaurus_updated` column to NOW()
+     *
+     * @param int $wordId
+     * @return bool Whether or not update was successful.
+     */
+    public function updateSetThesaurusUpdatedToNowWhereWordId(int $wordId) : bool
+    {
+        $sql = '
+            UPDATE `word`
+               SET `word`.`thesaurus_updated` = NOW()
+             WHERE `word`.`word_id` = ?
+                 ;
+        ';
+        return (bool) $this->adapter->query($sql, [$wordId])->getAffectedRows();
+    }
 }

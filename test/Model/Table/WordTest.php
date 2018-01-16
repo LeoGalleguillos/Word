@@ -101,4 +101,15 @@ class WordTest extends TableTestCase
             $this->wordTable->selectWhereWordId(1)
         );
     }
+
+    public function testUpdateSetThesaurusUpdatedToNowWhereWordId()
+    {
+        $this->assertFalse(
+            $this->wordTable->updateSetThesaurusUpdatedToNowWhereWordId(1)
+        );
+        $this->wordTable->insertIgnore('word', '2018-01-16 14:37:30');
+        $this->assertTrue(
+            $this->wordTable->updateSetThesaurusUpdatedToNowWhereWordId(1)
+        );
+    }
 }
