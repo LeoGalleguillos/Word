@@ -24,17 +24,19 @@ class Thesaurus
      */
     public function insertIgnore(
         int $wordId,
-        int $synonymWordId
+        int $synonymWordId,
+        int $order
     ) : bool {
         $sql = '
             INSERT IGNORE
-              INTO `thesaurus` (`word_id`, `synonym_word_id`)
-            VALUES (?, ?)
+              INTO `thesaurus` (`word_id`, `synonym_word_id`, `order`)
+            VALUES (?, ?, ?)
                  ;
         ';
         $parameters = [
             $wordId,
             $synonymWordId,
+            $order,
         ];
         return $this->adapter
                           ->query($sql, $parameters)

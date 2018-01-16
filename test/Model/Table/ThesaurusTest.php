@@ -50,16 +50,30 @@ class ThesaurusTest extends TableTestCase
     {
         $this->wordTable->insertIgnore('hello');
         $this->assertFalse(
-            $this->thesaurusTable->insertIgnore(1, 2)
+            $this->thesaurusTable->insertIgnore(1, 2, 1)
         );
 
         $this->wordTable->insertIgnore('world');
         $this->assertTrue(
-            $this->thesaurusTable->insertIgnore(1, 2)
+            $this->thesaurusTable->insertIgnore(1, 2, 1)
         );
 
         $this->assertFalse(
-            $this->thesaurusTable->insertIgnore(1, 2)
+            $this->thesaurusTable->insertIgnore(1, 2, 1)
+        );
+        $this->assertFalse(
+            $this->thesaurusTable->insertIgnore(1, 2, 2)
+        );
+
+        $this->wordTable->insertIgnore('again');
+        $this->assertFalse(
+            $this->thesaurusTable->insertIgnore(1, 3, 1)
+        );
+        $this->assertTrue(
+            $this->thesaurusTable->insertIgnore(1, 3, 2)
+        );
+        $this->assertFalse(
+            $this->thesaurusTable->insertIgnore(1, 3, 3)
         );
     }
 
@@ -74,7 +88,7 @@ class ThesaurusTest extends TableTestCase
         $this->wordTable->insertIgnore('world');
         $this->wordTable->insertIgnore('again');
 
-        $this->thesaurusTable->insertIgnore(1, 2);
+        $this->thesaurusTable->insertIgnore(1, 2, 1);
         $array = [
             new ArrayObject([
                 'word_id' => '2',
@@ -87,8 +101,7 @@ class ThesaurusTest extends TableTestCase
             $this->thesaurusTable->selectWhereWordId(1)
         );
 
-        $this->thesaurusTable->insertIgnore(1, 2);
-        $this->thesaurusTable->insertIgnore(1, 3);
+        $this->thesaurusTable->insertIgnore(1, 3, 2);
         $array = [
             new ArrayObject([
                 'word_id' => '2',
