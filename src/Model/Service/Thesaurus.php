@@ -1,6 +1,7 @@
 <?php
 namespace LeoGalleguillos\Word\Model\Service;
 
+use Exception;
 use LeoGalleguillos\Word\Model\Entity as WordEntity;
 use LeoGalleguillos\Word\Model\Factory as WordFactory;
 use LeoGalleguillos\Word\Model\Table as WordTable;
@@ -12,10 +13,12 @@ class Thesaurus
      */
     public function __construct(
         WordFactory\Word $wordFactory,
-        WordTable\Thesaurus $thesaurusTable
+        WordTable\Thesaurus $thesaurusTable,
+        WordTable\Word $wordTable
     ) {
         $this->wordFactory    = $wordFactory;
         $this->thesaurusTable = $thesaurusTable;
+        $this->wordTable      = $wordTable;
     }
 
     /**
@@ -27,7 +30,16 @@ class Thesaurus
     public function getSynonyms(
         WordEntity\Word $wordEntity
     ) : array {
-        $wordEntities = $this->getSynonymsFromMySql($wordEntity);
+        try {
+            $thesaurusUpdated = $this->wordTable->getThesaurusUpdatedWhereWordId(
+                $wordEntity->wordId
+            );
+        } catch (Exception $exception) {
+
+        }
+        if ($thesaurusUpdated ?? null) {
+            return $this->getSynonymsFromMySql($wordEntity);
+        }
 
         return $wordEntities;
     }
@@ -38,7 +50,7 @@ class Thesaurus
      * @param WordEntity\Word $wordEntity
      * @return WordEntity\Word[]
      */
-    public function getSynonymsFromMySql(
+    protected function getSynonymsFromMySql(
         WordEntity\Word $wordEntity
     ) : array {
         $wordEntities = [];

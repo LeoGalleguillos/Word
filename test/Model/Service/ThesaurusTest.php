@@ -19,9 +19,13 @@ class ThesaurusTest extends TestCase
         $this->thesaurusTableMock = $this->createMock(
             WordTable\Thesaurus::class
         );
+        $this->wordTableMock = $this->createMock(
+            WordTable\Word::class
+        );
         $this->thesaurusService = new WordService\Thesaurus(
             $this->wordFactoryMock,
-            $this->thesaurusTableMock
+            $this->thesaurusTableMock,
+            $this->wordTableMock
         );
     }
 
@@ -30,6 +34,66 @@ class ThesaurusTest extends TestCase
         $this->assertInstanceOf(
             WordService\Thesaurus::class,
             $this->thesaurusService
+        );
+    }
+
+    public function testGetSynonymsFromMySql()
+    {
+        $arrayObject1        = new ArrayObject([
+            'word_id' => '1',
+            'word'    => 'test',
+            'thesaurus_updated' => null,
+        ]);
+        $wordEntity1         = new WordEntity\Word();
+        $wordEntity1->wordId = 1;
+        $wordEntity1->word   = 'test';
+
+        $wordEntity2         = new WordEntity\Word();
+        $wordEntity2->wordId = 2;
+        $wordEntity2->word   = 'essay';
+        $arrayObject2        = new ArrayObject([
+            'word_id' => '2',
+            'word'    => 'essay',
+            'thesaurus_updated' => null,
+        ]);
+
+        $wordEntity3         = new WordEntity\Word();
+        $wordEntity3->wordId = 3;
+        $wordEntity3->word   = 'trial';
+        $arrayObject3        = new ArrayObject([
+            'word_id' => '3',
+            'word'    => 'trial',
+            'thesaurus_updated' => null,
+        ]);
+
+        $this->thesaurusTableMock->method('selectWhereWordId')->will(
+            $this->onConsecutiveCalls(
+                [],
+                [
+                    $arrayObject2,
+                    $arrayObject3,
+                ]
+            )
+        );
+        $this->wordFactoryMock->method('buildFromArrayObject')->will(
+            $this->onConsecutiveCalls($wordEntity2, $wordEntity3)
+        );
+
+        $reflectionClass = new ReflectionClass($this->thesaurusService);
+        $reflectionMethod = $reflectionClass->getMethod('getSynonymsFromMySql');
+        $reflectionMethod->setAccessible(true);
+
+        $this->assertEquals(
+            [],
+            $reflectionMethod->invokeArgs($this->thesaurusService, [$wordEntity1])
+        );
+
+        $this->assertEquals(
+            [
+                $wordEntity2,
+                $wordEntity3,
+            ],
+            $reflectionMethod->invokeArgs($this->thesaurusService, [$wordEntity1])
         );
     }
 }
