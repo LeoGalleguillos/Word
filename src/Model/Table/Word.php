@@ -2,6 +2,7 @@
 namespace LeoGalleguillos\Word\Model\Table;
 
 use ArrayObject;
+use Exception;
 use Zend\Db\Adapter\Adapter;
 
 class Word
@@ -60,15 +61,18 @@ class Word
     {
         $sql = '
             SELECT `word`.`word_id`
-                 , `word`.`title`
-                 , `word`.`body`
-                 , `word`.`thumbnail_root_relative_path`
+                 , `word`.`word`
+                 , `word`.`thesaurus_updated`
               FROM `word`
              WHERE `word`.`word_id` = ?
                  ;
         ';
-        $result = $this->adapter->query($sql, [$wordId])->current();
+        $arrayObject = $this->adapter->query($sql, [$wordId])->current();
 
-        return $result;
+        if (empty($arrayObject)) {
+            throw new Exception('Word ID not found.');
+        }
+
+        return $arrayObject;
     }
 }

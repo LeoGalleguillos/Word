@@ -13,4 +13,16 @@ class Word
     ) {
         $this->wordTable = $wordTable;
     }
+
+    public function buildFromArrayObject(
+        ArrayObject $arrayObject
+    ) : WordEntity\Word {
+        $wordEntity = new WordEntity\Word();
+
+        $wordEntity->wordId           = $arrayObject['word_id'];
+        $wordEntity->word             = $arrayObject['word'];
+        $wordEntity->thesaurusUpdated = $arrayObject['thesaurus_updated'] ?? null;
+
+        return $wordEntity;
+    }
 }

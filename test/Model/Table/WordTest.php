@@ -2,6 +2,7 @@
 namespace LeoGalleguillos\WordTest\Model\Table;
 
 use ArrayObject;
+use Exception;
 use LeoGalleguillos\WordTest\TableTestCase;
 use LeoGalleguillos\Word\Model\Table as WordTable;
 use Zend\Db\Adapter\Adapter;
@@ -74,6 +75,30 @@ class WordTest extends TableTestCase
         $this->assertSame(
             1,
             $this->wordTable->selectCount()
+        );
+    }
+
+    public function testSelectWhereWordId()
+    {
+        try {
+            $this->wordTable->selectWhereWordId(1);
+            $this->fail();
+        } catch (Exception $exception) {
+            $this->assertSame(
+                'Word ID not found.',
+                $exception->getMessage()
+            );
+        }
+
+        $this->wordTable->insertIgnore('word');
+        $arrayObject = new ArrayObject([
+            'word_id'           => '1',
+            'word'              => 'word',
+            'thesaurus_updated' => null,
+        ]);
+        $this->assertEquals(
+            $arrayObject,
+            $this->wordTable->selectWhereWordId(1)
         );
     }
 }
