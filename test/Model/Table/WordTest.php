@@ -90,11 +90,11 @@ class WordTest extends TableTestCase
             );
         }
 
-        $this->wordTable->insertIgnore('word');
+        $this->wordTable->insertIgnore('word', '2018-01-16 14:37:30');
         $arrayObject = new ArrayObject([
             'word_id'           => '1',
             'word'              => 'word',
-            'thesaurus_updated' => null,
+            'thesaurus_updated' => '2018-01-16 14:37:30',
         ]);
         $this->assertEquals(
             $arrayObject,

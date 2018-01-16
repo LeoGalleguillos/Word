@@ -24,16 +24,18 @@ class Word
      * @return int Primary key or 0 for failed insert
      */
     public function insertIgnore(
-        string $word
+        string $word,
+        string $thesaurusUpdated = null
     ) {
         $sql = '
             INSERT IGNORE
-              INTO `word` (`word`)
-            VALUES (?)
+              INTO `word` (`word`, `thesaurus_updated`)
+            VALUES (?, ?)
                  ;
         ';
         $parameters = [
             $word,
+            $thesaurusUpdated,
         ];
         return (int) $this->adapter
                           ->query($sql, $parameters)
