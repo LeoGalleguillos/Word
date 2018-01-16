@@ -80,11 +80,11 @@ class Thesaurus
 
         $results = $this->adapter->query($sql, [$wordId]);
 
-        $rows = [];
+        $arrayObjects = [];
         foreach ($results as $row) {
-            $rows[] = (array) $row;
+            $arrayObjects[] = $row;
         }
 
-        return $rows;
+        return $arrayObjects;
     }
 }

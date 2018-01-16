@@ -76,29 +76,34 @@ class ThesaurusTest extends TableTestCase
 
         $this->thesaurusTable->insertIgnore(1, 2);
         $array = [
-            [
+            new ArrayObject([
                 'word_id' => '2',
                 'word'    => 'world',
                 'thesaurus_updated' => null,
-            ],
+            ]),
         ];
-        $this->assertSame(
+        $this->assertEquals(
             $array,
             $this->thesaurusTable->selectWhereWordId(1)
         );
 
         $this->thesaurusTable->insertIgnore(1, 2);
+        $this->thesaurusTable->insertIgnore(1, 3);
         $array = [
-            [
+            new ArrayObject([
                 'word_id' => '2',
                 'word'    => 'world',
                 'thesaurus_updated' => null,
-            ],
-            [
+            ]),
+            new ArrayObject([
                 'word_id' => '3',
                 'word'    => 'again',
                 'thesaurus_updated' => null,
-            ],
+            ]),
         ];
+        $this->assertEquals(
+            $array,
+            $this->thesaurusTable->selectWhereWordId(1)
+        );
     }
 }
