@@ -2,6 +2,7 @@
 namespace LeoGalleguillos\WordTest\Model\Service\Thesaurus;
 
 use ArrayObject;
+use Exception;
 use LeoGalleguillos\Word\Model\Entity as WordEntity;
 use LeoGalleguillos\Word\Model\Factory as WordFactory;
 use LeoGalleguillos\Word\Model\Service as WordService;
@@ -19,9 +20,13 @@ class MySqlTest extends TestCase
         $this->thesaurusTableMock = $this->createMock(
             WordTable\Thesaurus::class
         );
+        $this->wordTableMock = $this->createMock(
+            WordTable\Word::class
+        );
         $this->mySqlService = new WordService\Thesaurus\MySql(
             $this->wordFactoryMock,
-            $this->thesaurusTableMock
+            $this->thesaurusTableMock,
+            $this->wordTableMock
         );
     }
 
@@ -30,6 +35,30 @@ class MySqlTest extends TestCase
         $this->assertInstanceOf(
             WordService\Thesaurus\MySql::class,
             $this->mySqlService
+        );
+    }
+
+    public function testShouldSynonymsBeRetrievedFromMySql()
+    {
+        $wordEntity1         = new WordEntity\Word();
+        $wordEntity1->wordId = 1;
+        $wordEntity1->word   = 'test';
+
+        $this->wordTableMock->method('selectThesaurusUpdatedWhereWordId')->will(
+            $this->onConsecutiveCalls(
+                null,
+                '2018-01-16 16:50:50',
+                $this->throwException(new Exception('Word ID not found.'))
+            )
+        );
+        $this->assertFalse(
+            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
+        );
+        $this->assertTrue(
+            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
+        );
+        $this->assertFalse(
+            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
         );
     }
 
