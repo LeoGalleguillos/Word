@@ -37,6 +37,18 @@ class ThesaurusTest extends TestCase
         );
     }
 
+    public function testGetSynonyms()
+    {
+        $wordEntity1         = new WordEntity\Word();
+        $wordEntity1->wordId = 1;
+        $wordEntity1->word   = 'test';
+
+        $this->assertSame(
+            [],
+            $this->thesaurusService->getSynonyms($wordEntity1)
+        );
+    }
+
     public function testGetSynonymsFromMySql()
     {
         $arrayObject1        = new ArrayObject([

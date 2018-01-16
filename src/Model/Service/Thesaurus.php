@@ -31,7 +31,7 @@ class Thesaurus
         WordEntity\Word $wordEntity
     ) : array {
         try {
-            $thesaurusUpdated = $this->wordTable->getThesaurusUpdatedWhereWordId(
+            $thesaurusUpdated = $this->wordTable->selectThesaurusUpdatedWhereWordId(
                 $wordEntity->wordId
             );
         } catch (Exception $exception) {
@@ -41,7 +41,12 @@ class Thesaurus
             return $this->getSynonymsFromMySql($wordEntity);
         }
 
-        return $wordEntities;
+        $this->wordTable->updateSetThesaurusUpdatedToNowWhereWordId(
+            $wordEntity->wordId
+        );
+        // (insert and get) or (get) every word
+        // return all word entities
+        return [];
     }
 
     /**
