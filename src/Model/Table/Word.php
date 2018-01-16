@@ -58,6 +58,23 @@ class Word
         return (int) $row['count'];
     }
 
+    public function selectThesaurusUpdatedWhereWordId(int $wordId)
+    {
+        $sql = '
+            SELECT `word`.`thesaurus_updated`
+              FROM `word`
+             WHERE `word`.`word_id` = ?
+                 ;
+        ';
+        $arrayObject = $this->adapter->query($sql, [$wordId])->current();
+
+        if (empty($arrayObject)) {
+            throw new Exception('Word ID not found.');
+        }
+
+        return $arrayObject['thesaurus_updated'];
+    }
+
     /**
      * Select where word ID.
      *

@@ -78,6 +78,25 @@ class WordTest extends TableTestCase
         );
     }
 
+    public function testSelectThesaurusUpdatedWhereWordId()
+    {
+        try {
+            $this->wordTable->selectThesaurusUpdatedWhereWordId(1);
+            $this->fail();
+        } catch (Exception $exception) {
+            $this->assertSame(
+                'Word ID not found.',
+                $exception->getMessage()
+            );
+        }
+
+        $this->wordTable->insertIgnore('hello');
+        $this->assertNull($this->wordTable->selectThesaurusUpdatedWhereWordId(1));
+
+        $this->wordTable->updateSetThesaurusUpdatedToNowWhereWordId(1);
+        $this->assertNotNull($this->wordTable->selectThesaurusUpdatedWhereWordId(1));
+    }
+
     public function testSelectWhereWordId()
     {
         try {
