@@ -134,6 +134,30 @@ class WordTest extends TableTestCase
         );
     }
 
+    public function testSelectWhereWord()
+    {
+        try {
+            $this->wordTable->selectWhereWord('test');
+            $this->fail();
+        } catch (Exception $exception) {
+            $this->assertSame(
+                'Word not found.',
+                $exception->getMessage()
+            );
+        }
+
+        $this->wordTable->insertIgnore('word', '2018-01-16 14:37:30');
+        $arrayObject = new ArrayObject([
+            'word_id'           => '1',
+            'word'              => 'word',
+            'thesaurus_updated' => '2018-01-16 14:37:30',
+        ]);
+        $this->assertEquals(
+            $arrayObject,
+            $this->wordTable->selectWhereWord('word')
+        );
+    }
+
     public function testUpdateSetThesaurusUpdatedToNowWhereWordId()
     {
         $this->assertFalse(

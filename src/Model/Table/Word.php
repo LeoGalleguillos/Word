@@ -119,6 +119,31 @@ class Word
     }
 
     /**
+     * Select where word.
+     *
+     * @param string $word
+     * @return ArrayObject
+     */
+    public function selectWhereWord(string $word) : ArrayObject
+    {
+        $sql = '
+            SELECT `word`.`word_id`
+                 , `word`.`word`
+                 , `word`.`thesaurus_updated`
+              FROM `word`
+             WHERE `word`.`word` = ?
+                 ;
+        ';
+        $arrayObject = $this->adapter->query($sql, [$word])->current();
+
+        if (empty($arrayObject)) {
+            throw new Exception('Word not found.');
+        }
+
+        return $arrayObject;
+    }
+
+    /**
      * Update set `thesaurus_updated` column to NOW()
      *
      * @param int $wordId
