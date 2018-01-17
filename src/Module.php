@@ -59,6 +59,11 @@ class Module
                         $serviceManager->get(WordTable\Word::class)
                     );
                 },
+                WordTable\Api::class => function ($serviceManager) {
+                    return new WordTable\Api(
+                        $serviceManager->get('word')
+                    );
+                },
                 WordTable\Thesaurus::class => function ($serviceManager) {
                     return new WordTable\Thesaurus(
                         $serviceManager->get('word')
