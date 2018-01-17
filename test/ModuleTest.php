@@ -3,6 +3,7 @@ namespace LeoGalleguillos\WordTest;
 
 use LeoGalleguillos\Word\Module;
 use PHPUnit\Framework\TestCase;
+use Zend\Mvc\Application;
 use Zend\ServiceManager\ServiceManager;
 
 class ModuleTest extends TestCase
@@ -20,6 +21,8 @@ class ModuleTest extends TestCase
     public function testGetServiceConfig()
     {
         $applicationConfig = include(__DIR__ . '/../config/application.config.php');
+        $this->application = Application::init($applicationConfig);
+
         $localConfig       = include(__DIR__ . '/../config/autoload/local.php');
         $serviceConfig     = $this->module->getServiceConfig();
 

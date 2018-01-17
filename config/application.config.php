@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'modules' => [
+        'Zend\Db',
+        'Zend\Router',
+    ],
     // These are various options for the listeners attached to the ModuleManager
     'module_listener_options' => array(
         // This should be an array of paths in which modules reside.
@@ -18,5 +22,6 @@ return [
         'config_glob_paths' => array(
             'config/autoload/{{,*.}global,{,*.}local}.php',
         ),
+        'config_cache_enabled' => false,
     ),
 ];
