@@ -98,4 +98,33 @@ class ThesaurusTest extends TestCase
             $this->thesaurusService->getSynonyms($wordEntity1->word)
         );
     }
+
+    public function testSetSynonyms()
+    {
+        $wordEntity1         = new WordEntity\Word();
+        $wordEntity1->wordId = 1;
+        $wordEntity1->word   = 'test';
+
+        $wordEntity2         = new WordEntity\Word();
+        $wordEntity2->wordId = 2;
+        $wordEntity2->word   = 'essay';
+
+        $wordEntity3         = new WordEntity\Word();
+        $wordEntity3->wordId = 3;
+        $wordEntity3->word   = 'trial';
+
+        $wordEntities = [
+            $wordEntity2,
+            $wordEntity3,
+        ];
+
+        $this->wordTableMock
+             ->expects($this->once())
+             ->method('updateSetThesaurusUpdatedToNowWhereWordId');
+        $this->thesaurusTableMock
+             ->expects($this->exactly(count($wordEntities)))
+             ->method('insertIgnore');
+
+        $this->thesaurusService->setSynonyms($wordEntity1, $wordEntities);
+    }
 }

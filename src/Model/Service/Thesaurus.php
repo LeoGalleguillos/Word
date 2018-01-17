@@ -49,6 +49,35 @@ class Thesaurus
             $wordEntities[] = $this->wordService->getEntityFromString($synonym);
         }
 
+        $this->setSynonyms($wordEntity, $wordEntities);
+
         return $wordEntities;
+    }
+
+    /**
+     * Set synonyms.
+     *
+     * Update the thesaurus_updated timestamp and insert IDs into thesaurus table.
+     *
+     * @param WordEntity\Word $wordEntity
+     * @param WordEntity\Word[] $synonymEntities
+     */
+    public function setSynonyms(
+        WordEntity\Word $wordEntity,
+        array $synonymEntities
+    ) {
+        $this->wordTable->updateSetThesaurusUpdatedToNowWhereWordId(
+            $wordEntity->wordId
+        );
+
+        $order = 0;
+        foreach ($synonymEntities as $synonymEntity) {
+            $order++;
+            $this->thesaurusTable->insertIgnore(
+                $wordEntity->wordId,
+                $synonymEntity->wordId,
+                $order
+            );
+        }
     }
 }
