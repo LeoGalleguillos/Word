@@ -40,6 +40,13 @@ class Module
                         $serviceManager->get(WordTable\Thesaurus::class)
                     );
                 },
+                WordService\Thesaurus\MySql::class => function ($serviceManager) {
+                    return new WordService\Thesaurus\MySql(
+                        $serviceManager->get(WordFactory\Word::class),
+                        $serviceManager->get(WordTable\Thesaurus::class),
+                        $serviceManager->get(WordTable\Word::class)
+                    );
+                },
                 WordTable\Thesaurus::class => function ($serviceManager) {
                     return new WordTable\Thesaurus(
                         $serviceManager->get('word')

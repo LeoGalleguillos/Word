@@ -16,6 +16,9 @@ class ThesaurusTest extends TestCase
         $this->wordFactoryMock = $this->createMock(
             WordFactory\Word::class
         );
+        $this->thesaurusMySqlServiceMock = $this->createMock(
+            WordService\Thesaurus\MySql::class
+        );
         $this->thesaurusTableMock = $this->createMock(
             WordTable\Thesaurus::class
         );
@@ -24,6 +27,7 @@ class ThesaurusTest extends TestCase
         );
         $this->thesaurusService = new WordService\Thesaurus(
             $this->wordFactoryMock,
+            $this->thesaurusMySqlServiceMock,
             $this->thesaurusTableMock,
             $this->wordTableMock
         );

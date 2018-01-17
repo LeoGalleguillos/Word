@@ -4,6 +4,7 @@ namespace LeoGalleguillos\Word\Model\Service;
 use Exception;
 use LeoGalleguillos\Word\Model\Entity as WordEntity;
 use LeoGalleguillos\Word\Model\Factory as WordFactory;
+use LeoGalleguillos\Word\Model\Service as WordService;
 use LeoGalleguillos\Word\Model\Table as WordTable;
 
 class Thesaurus
@@ -13,6 +14,7 @@ class Thesaurus
      */
     public function __construct(
         WordFactory\Word $wordFactory,
+        WordService\Thesaurus\MySql $thesaurusMySqlService,
         WordTable\Thesaurus $thesaurusTable,
         WordTable\Word $wordTable
     ) {
