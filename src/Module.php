@@ -33,7 +33,8 @@ class Module
                     $config = $serviceManager->get('Config');
                     return new WordService\Api\DictionaryApiCom\Thesaurus(
                         $serviceManager->get(MemcachedService\Memcached::class),
-                        $config['dictionaryapicom']['api_key']
+                        $config['dictionaryapicom']['api_key'],
+                        $serviceManager->get(WordTable\Api::class)
                     );
                 },
                 WordService\Thesaurus::class => function ($serviceManager) {
