@@ -1,6 +1,7 @@
 <?php
 namespace LeoGalleguillos\Word;
 
+use LeoGalleguillos\Memcached\Model\Service as MemcachedService;
 use LeoGalleguillos\Word\Model\Factory as WordFactory;
 use LeoGalleguillos\Word\Model\Service as WordService;
 use LeoGalleguillos\Word\Model\Table as WordTable;
@@ -31,6 +32,7 @@ class Module
                 WordService\Api\DictionaryApiCom\Thesaurus::class => function ($serviceManager) {
                     $config = $serviceManager->get('Config');
                     return new WordService\Api\DictionaryApiCom\Thesaurus(
+                        $serviceManager->get(MemcachedService\Memcached::class),
                         $config['dictionaryapicom']['api_key']
                     );
                 },
