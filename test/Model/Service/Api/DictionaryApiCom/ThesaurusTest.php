@@ -70,6 +70,13 @@ class ThesaurusTest extends TestCase
         );
     }
 
+    public function testInsertOnDuplicateKeyUpdate()
+    {
+        $this->assertNull(
+            $this->thesaurusApi->insertOnDuplicateKeyUpdate()
+        );
+    }
+
     public function testWasApiCalledRecently()
     {
         $this->apiTableMock->method('selectValueWhereKey')->will(

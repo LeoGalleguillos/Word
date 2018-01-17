@@ -73,6 +73,14 @@ class Thesaurus
         return $xmlString;
     }
 
+    public function insertOnDuplicateKeyUpdate()
+    {
+        $this->apiTable->insertOnDuplicateKeyUpdate(
+            'dictionaryapicom_last_call_microtime',
+            microtime(true)
+        );
+    }
+
     /**
      * Was API called recently.
      *
