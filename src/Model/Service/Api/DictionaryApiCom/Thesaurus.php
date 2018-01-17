@@ -64,6 +64,8 @@ class Thesaurus
             return $xmlString;
         }
 
+        $this->insertOnDuplicateKeyUpdate();
+
         $url       = 'https://www.dictionaryapi.com'
                    . '/api/v1/references/thesaurus/xml/test?key='
                    . $this->apiKey;
