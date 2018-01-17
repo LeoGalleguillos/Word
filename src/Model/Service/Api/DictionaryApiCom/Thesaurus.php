@@ -41,8 +41,13 @@ class Thesaurus
         foreach ($synonyms as $index => $synonym) {
             if ($word == $synonym) {
                 unset($synonyms[$index]);
-                break;
+                continue;
             }
+
+            $synonym = preg_replace('/\[.*\]?/', '', $synonym);
+            $synonym = preg_replace('/\(.*\)?/', '', $synonym);
+            $synonym = trim($synonym);
+            $synonyms[$index] = $synonym;
         }
 
         sort($synonyms);
