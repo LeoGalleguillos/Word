@@ -22,25 +22,6 @@ class MySql
     }
 
     /**
-     * Should synonyms be retrieved from MySQL.
-     *
-     * @param WordEntity\Word $wordEntity
-     * @return bool
-     */
-    public function shouldSynonymsBeRetrievedFromMySql(
-        WordEntity\Word $wordEntity
-    ) : bool {
-        try {
-            $thesaurusUpdated = $this->wordTable->selectThesaurusUpdatedWhereWordId(
-                $wordEntity->wordId
-            );
-        } catch (Exception $exception) {
-            return false;
-        }
-        return (bool) $thesaurusUpdated;
-    }
-
-    /**
      * Get synonyms.
      *
      * @param WordEntity\Word $wordEntity
@@ -60,5 +41,24 @@ class MySql
         }
 
         return $wordEntities;
+    }
+
+    /**
+     * Should synonyms be retrieved from MySQL.
+     *
+     * @param WordEntity\Word $wordEntity
+     * @return bool
+     */
+    public function shouldSynonymsBeRetrievedFromMySql(
+        WordEntity\Word $wordEntity
+    ) : bool {
+        try {
+            $thesaurusUpdated = $this->wordTable->selectThesaurusUpdatedWhereWordId(
+                $wordEntity->wordId
+            );
+        } catch (Exception $exception) {
+            return false;
+        }
+        return (bool) $thesaurusUpdated;
     }
 }

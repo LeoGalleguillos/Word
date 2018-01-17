@@ -38,30 +38,6 @@ class MySqlTest extends TestCase
         );
     }
 
-    public function testShouldSynonymsBeRetrievedFromMySql()
-    {
-        $wordEntity1         = new WordEntity\Word();
-        $wordEntity1->wordId = 1;
-        $wordEntity1->word   = 'test';
-
-        $this->wordTableMock->method('selectThesaurusUpdatedWhereWordId')->will(
-            $this->onConsecutiveCalls(
-                null,
-                '2018-01-16 16:50:50',
-                $this->throwException(new Exception('Word ID not found.'))
-            )
-        );
-        $this->assertFalse(
-            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
-        );
-        $this->assertTrue(
-            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
-        );
-        $this->assertFalse(
-            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
-        );
-    }
-
     public function testGetSynonyms()
     {
         $arrayObject1        = new ArrayObject([
@@ -115,6 +91,30 @@ class MySqlTest extends TestCase
                 $wordEntity3,
             ],
             $this->mySqlService->getSynonyms($wordEntity1)
+        );
+    }
+
+    public function testShouldSynonymsBeRetrievedFromMySql()
+    {
+        $wordEntity1         = new WordEntity\Word();
+        $wordEntity1->wordId = 1;
+        $wordEntity1->word   = 'test';
+
+        $this->wordTableMock->method('selectThesaurusUpdatedWhereWordId')->will(
+            $this->onConsecutiveCalls(
+                null,
+                '2018-01-16 16:50:50',
+                $this->throwException(new Exception('Word ID not found.'))
+            )
+        );
+        $this->assertFalse(
+            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
+        );
+        $this->assertTrue(
+            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
+        );
+        $this->assertFalse(
+            $this->mySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity1)
         );
     }
 }
