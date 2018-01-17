@@ -19,10 +19,12 @@ class ModuleTest extends TestCase
 
     public function testGetServiceConfig()
     {
-        $localConfig   = include(__DIR__ . '/../config/autoload/local.php');
-        $serviceConfig = $this->module->getServiceConfig();
+        $applicationConfig = include(__DIR__ . '/../config/application.config.php');
+        $localConfig       = include(__DIR__ . '/../config/autoload/local.php');
+        $serviceConfig     = $this->module->getServiceConfig();
 
         $serviceManager = new ServiceManager();
+        $serviceManager->configure($applicationConfig);
         $serviceManager->configure($serviceConfig);
         //$serviceManager->get(\LeoGalleguillos\Word\Model\Service\Thesaurus::class);
 
