@@ -37,14 +37,19 @@ class Thesaurus
     public function getSynonyms(
         string $word
     ) : array {
-        $wordEntity   = $this->wordService->getEntityFromString($word);
-        $wordEntities = [];
+        $wordEntity = $this->wordService->getEntityFromString($word);
 
         if ($this->thesaurusMySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity)) {
             return $this->thesaurusMySqlService->getSynonyms($wordEntity);
         }
 
-        $synonyms = $this->apiThesaurusService->getSynonyms($wordEntity->word);
+        if ($this->apiThesaurusService->wasApiCalledRecently()) {
+            return [];
+        }
+
+        $wordEntities = [];
+        $synonyms     = $this->apiThesaurusService->getSynonyms($wordEntity->word);
+
         foreach ($synonyms as $synonym) {
             $wordEntities[] = $this->wordService->getEntityFromString($synonym);
         }
