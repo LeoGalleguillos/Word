@@ -68,6 +68,17 @@ class ThesaurusTest extends TestCase
             $synonyms,
             $this->thesaurusApi->getSynonyms('test')
         );
+
+        $synonyms = [
+            'greeting',
+            'salutation',
+            'salute',
+            'welcome',
+        ];
+        $this->assertSame(
+            $synonyms,
+            $this->thesaurusApi->getSynonyms('hello')
+        );
     }
 
     public function testInsertOnDuplicateKeyUpdate()

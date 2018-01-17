@@ -66,9 +66,11 @@ class Thesaurus
 
         $this->insertOnDuplicateKeyUpdate();
 
-        $url       = 'https://www.dictionaryapi.com'
-                   . '/api/v1/references/thesaurus/xml/test?key='
-                   . $this->apiKey;
+        $url = 'https://www.dictionaryapi.com'
+             . '/api/v1/references/thesaurus/xml/'
+             . urlencode($word)
+             . '?key='
+             . $this->apiKey;
         $xmlString = file_get_contents($url);
 
         $this->memcached->setForMinutes($cacheKey, $xmlString, 3);
