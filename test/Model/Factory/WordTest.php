@@ -42,4 +42,26 @@ class WordTest extends TestCase
             $this->wordFactory->buildFromArrayObject($arrayObject)
         );
     }
+
+    public function testBuildFromWord()
+    {
+        $arrayObject = new ArrayObject([
+            'word_id'           => '10',
+            'word'              => 'test',
+            'thesaurus_updated' => '2018-01-17 08:39:12',
+        ]);
+        $wordEntity = new WordEntity\Word();
+        $wordEntity->wordId           = 10;
+        $wordEntity->word             = 'test';
+        $wordEntity->thesaurusUpdated = '2018-01-17 08:39:12';
+
+        $this->wordTableMock->method('selectWhereWord')->willReturn(
+            $arrayObject
+        );
+
+        $this->assertEquals(
+            $wordEntity,
+            $this->wordFactory->buildFromWord('test')
+        );
+    }
 }

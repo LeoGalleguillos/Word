@@ -25,4 +25,11 @@ class Word
 
         return $wordEntity;
     }
+
+    public function buildFromWord(string $word) : WordEntity\Word
+    {
+        return $this->buildFromArrayObject(
+            $this->wordTable->selectWhereWord($word)
+        );
+    }
 }
