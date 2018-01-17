@@ -55,13 +55,7 @@ class ThesaurusTest extends TestCase
     {
         $synonyms = [
             'essay',
-            'exam',
             'experimentation',
-            'quiz',
-            'sample',
-            'strain',
-            'stretch',
-            'tax',
             'trial',
         ];
         $this->assertSame(

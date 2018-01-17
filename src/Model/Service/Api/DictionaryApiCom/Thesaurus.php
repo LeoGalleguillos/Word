@@ -28,13 +28,11 @@ class Thesaurus
         $synonyms = [];
 
         $simpleXmlElement = $this->getSimpleXmlElement($word);
-        foreach ($simpleXmlElement->{'entry'} as $entry) {
-            foreach ($entry->{'sens'} as $sense) {
-                $synonymsString = (string) $sense->{'syn'};
-                $synonymsArray  = explode(', ', $synonymsString);
-                $synonyms       = array_merge($synonyms, $synonymsArray);
-            }
-        }
+        $entry            = $simpleXmlElement->{'entry'};
+        $sense            = $entry->{'sens'};
+        $synonymsString   = (string) $sense->{'syn'};
+        $synonymsArray    = explode(', ', $synonymsString);
+        $synonyms         = array_merge($synonyms, $synonymsArray);
 
         $synonyms = array_unique($synonyms);
 
