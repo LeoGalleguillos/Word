@@ -19,8 +19,8 @@ class ThesaurusTest extends TableTestCase
 
         $this->setForeignKeyChecks0();
         $this->dropTables();
-        $this->createTables();
         $this->setForeignKeyChecks1();
+        $this->createTables();
     }
 
     protected function dropTables()
@@ -34,10 +34,10 @@ class ThesaurusTest extends TableTestCase
 
     protected function createTables()
     {
-        $sql = file_get_contents($this->sqlDatabaseDirectory . '/thesaurus/create.sql');
+        $sql = file_get_contents($this->sqlDatabaseDirectory . '/word/create.sql');
         $result = $this->adapter->query($sql)->execute();
 
-        $sql = file_get_contents($this->sqlDatabaseDirectory . '/word/create.sql');
+        $sql = file_get_contents($this->sqlDatabaseDirectory . '/thesaurus/create.sql');
         $result = $this->adapter->query($sql)->execute();
     }
 
