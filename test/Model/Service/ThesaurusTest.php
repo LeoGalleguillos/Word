@@ -19,6 +19,9 @@ class ThesaurusTest extends TestCase
         $this->thesaurusMySqlServiceMock = $this->createMock(
             WordService\Thesaurus\MySql::class
         );
+        $this->wordServiceMock = $this->createMock(
+            WordService\Word::class
+        );
         $this->thesaurusTableMock = $this->createMock(
             WordTable\Thesaurus::class
         );
@@ -28,6 +31,7 @@ class ThesaurusTest extends TestCase
         $this->thesaurusService = new WordService\Thesaurus(
             $this->wordFactoryMock,
             $this->thesaurusMySqlServiceMock,
+            $this->wordServiceMock,
             $this->thesaurusTableMock,
             $this->wordTableMock
         );
@@ -46,6 +50,10 @@ class ThesaurusTest extends TestCase
         $wordEntity1         = new WordEntity\Word();
         $wordEntity1->wordId = 1;
         $wordEntity1->word   = 'test';
+
+        $this->wordServiceMock->method('getEntityFromString')->willReturn(
+            $wordEntity1
+        );
 
         $this->assertSame(
             [],

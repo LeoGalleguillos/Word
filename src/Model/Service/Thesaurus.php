@@ -15,12 +15,15 @@ class Thesaurus
     public function __construct(
         WordFactory\Word $wordFactory,
         WordService\Thesaurus\MySql $thesaurusMySqlService,
+        WordService\Word $wordService,
         WordTable\Thesaurus $thesaurusTable,
         WordTable\Word $wordTable
     ) {
-        $this->wordFactory    = $wordFactory;
-        $this->thesaurusTable = $thesaurusTable;
-        $this->wordTable      = $wordTable;
+        $this->wordFactory           = $wordFactory;
+        $this->thesaurusMySqlService = $thesaurusMySqlService;
+        $this->wordService           = $wordService;
+        $this->thesaurusTable        = $thesaurusTable;
+        $this->wordTable             = $wordTable;
     }
 
     /**
@@ -32,6 +35,11 @@ class Thesaurus
     public function getSynonyms(
         string $word
     ) : array {
+        $wordEntity = $this->wordService->getEntityFromString($word);
+
+        if ($this->thesaurusMySqlService->shouldSynonymsBeRetrievedFromMySql($wordEntity)) {
+            return $this->thesaurusMySqlService->getSynonyms($wordEntity);
+        }
 
         // (insert and get) or (get) every word
         // return all word entities
