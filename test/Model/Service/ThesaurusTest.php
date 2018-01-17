@@ -16,6 +16,9 @@ class ThesaurusTest extends TestCase
         $this->wordFactoryMock = $this->createMock(
             WordFactory\Word::class
         );
+        $this->apiThesaurusServiceMock = $this->createMock(
+            WordService\Api\DictionaryApiCom\Thesaurus::class
+        );
         $this->thesaurusMySqlServiceMock = $this->createMock(
             WordService\Thesaurus\MySql::class
         );
@@ -30,6 +33,7 @@ class ThesaurusTest extends TestCase
         );
         $this->thesaurusService = new WordService\Thesaurus(
             $this->wordFactoryMock,
+            $this->apiThesaurusServiceMock,
             $this->thesaurusMySqlServiceMock,
             $this->wordServiceMock,
             $this->thesaurusTableMock,
@@ -51,13 +55,47 @@ class ThesaurusTest extends TestCase
         $wordEntity1->wordId = 1;
         $wordEntity1->word   = 'test';
 
-        $this->wordServiceMock->method('getEntityFromString')->willReturn(
-            $wordEntity1
+        $wordEntity2         = new WordEntity\Word();
+        $wordEntity2->wordId = 2;
+        $wordEntity2->word   = 'essay';
+
+        $wordEntity3         = new WordEntity\Word();
+        $wordEntity3->wordId = 3;
+        $wordEntity3->word   = 'trial';
+
+        $this->wordServiceMock->method('getEntityFromString')->will(
+            $this->onConsecutiveCalls(
+                $wordEntity1, $wordEntity1, $wordEntity2, $wordEntity3
+            )
+        );
+        $this->thesaurusMySqlServiceMock
+             ->method('shouldSynonymsBeRetrievedFromMySql')
+             ->will(
+            $this->onConsecutiveCalls(
+                true, false
+            )
+        );
+        $this->thesaurusMySqlServiceMock->method('getSynonyms')->willReturn([
+            $wordEntity2, $wordEntity3
+        ]);
+
+        $this->thesaurusMySqlServiceMock->expects($this->once())->method('getSynonyms');
+        $this->assertSame(
+            [$wordEntity2, $wordEntity3],
+            $this->thesaurusService->getSynonyms($wordEntity1->word)
         );
 
-        $this->assertSame(
-            [],
-            $this->thesaurusService->getSynonyms('test')
+        $this->apiThesaurusServiceMock->method('getSynonyms')->willReturn(
+            [$wordEntity2->word, $wordEntity3->word]
+        );
+
+        $this->apiThesaurusServiceMock->expects($this->once())->method('getSynonyms');
+        $this->wordServiceMock
+             ->expects($this->exactly(3))
+             ->method('getEntityFromString');
+        $this->assertEquals(
+            [$wordEntity2, $wordEntity3],
+            $this->thesaurusService->getSynonyms($wordEntity1->word)
         );
     }
 }

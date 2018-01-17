@@ -14,6 +14,12 @@ class Thesaurus
         $this->apiKey    = $apiKey;
     }
 
+    /**
+     * Get synonyms.
+     *
+     * @param string $word
+     * @return string[]
+     */
     public function getSynonyms(string $word) : array
     {
         $synonyms = [];
