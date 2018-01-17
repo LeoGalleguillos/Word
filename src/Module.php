@@ -37,13 +37,23 @@ class Module
                 WordService\Thesaurus::class => function ($serviceManager) {
                     return new WordService\Thesaurus(
                         $serviceManager->get(WordFactory\Word::class),
-                        $serviceManager->get(WordTable\Thesaurus::class)
+                        $serviceManager->get(WordService\Api\DictionaryApiCom\Thesaurus::class),
+                        $serviceManager->get(WordService\Thesaurus\MySql::class),
+                        $serviceManager->get(WordService\Word::class),
+                        $serviceManager->get(WordTable\Thesaurus::class),
+                        $serviceManager->get(WordTable\Word::class)
                     );
                 },
                 WordService\Thesaurus\MySql::class => function ($serviceManager) {
                     return new WordService\Thesaurus\MySql(
                         $serviceManager->get(WordFactory\Word::class),
                         $serviceManager->get(WordTable\Thesaurus::class),
+                        $serviceManager->get(WordTable\Word::class)
+                    );
+                },
+                WordService\Word::class => function ($serviceManager) {
+                    return new WordService\Word(
+                        $serviceManager->get(WordFactory\Word::class),
                         $serviceManager->get(WordTable\Word::class)
                     );
                 },
