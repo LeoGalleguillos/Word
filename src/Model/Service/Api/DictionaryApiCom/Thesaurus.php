@@ -2,16 +2,19 @@
 namespace LeoGalleguillos\Word\Model\Service\Api\DictionaryApiCom;
 
 use LeoGalleguillos\Memcached\Model\Service as MemcachedService;
+use LeoGalleguillos\Word\Model\Table as WordTable;
 use SimpleXMLElement;
 
 class Thesaurus
 {
     public function __construct(
         MemcachedService\Memcached $memcached,
-        string $apiKey
+        string $apiKey,
+        WordTable\Api $apiTable
     ) {
         $this->memcached = $memcached;
         $this->apiKey    = $apiKey;
+        $this->apiTable  = $apiTable;
     }
 
     /**
@@ -68,5 +71,19 @@ class Thesaurus
 
         $this->memcached->setForMinutes($cacheKey, $xmlString, 3);
         return $xmlString;
+    }
+
+    /**
+     * Was API called recently.
+     *
+     * @return bool
+     */
+    public function wasApiCalledRecently()
+    {
+        $lastCallMicrotime = $this->apiTable->selectValueWhereKey(
+            'dictionaryapicom_last_call_microtime'
+        );
+
+        return (microtime(true) - $lastCallMicrotime) < 90;
     }
 }

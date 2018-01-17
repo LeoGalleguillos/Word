@@ -18,9 +18,13 @@ class ThesaurusTest extends TestCase
         $this->memcached = new MemcachedService\Memcached();
         $configArray = require(__DIR__ . '/../../../../../config/autoload/local.php');
         $apiKey      = $configArray['dictionaryapicom']['api_key'];
+        $this->apiTableMock = $this->createMock(
+            WordTable\Api::class
+        );
         $this->thesaurusApi = new WordService\Api\DictionaryApiCom\Thesaurus(
             $this->memcached,
-            $apiKey
+            $apiKey,
+            $this->apiTableMock
         );
     }
 
@@ -64,5 +68,24 @@ class ThesaurusTest extends TestCase
             $synonyms,
             $this->thesaurusApi->getSynonyms('test')
         );
+    }
+
+    public function testWasApiCalledRecently()
+    {
+        $this->apiTableMock->method('selectValueWhereKey')->will(
+            $this->onConsecutiveCalls(
+                null,
+                microtime(true),
+                microtime(true) - 89,
+                microtime(true) + 10,
+                microtime(true) - 100
+            )
+        );
+
+        $this->assertFalse($this->thesaurusApi->wasApiCalledRecently());
+        $this->assertTrue($this->thesaurusApi->wasApiCalledRecently());
+        $this->assertTrue($this->thesaurusApi->wasApiCalledRecently());
+        $this->assertTrue($this->thesaurusApi->wasApiCalledRecently());
+        $this->assertFalse($this->thesaurusApi->wasApiCalledRecently());
     }
 }
