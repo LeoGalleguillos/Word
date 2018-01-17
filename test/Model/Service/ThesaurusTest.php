@@ -49,7 +49,7 @@ class ThesaurusTest extends TestCase
 
         $this->assertSame(
             [],
-            $this->thesaurusService->getSynonyms($wordEntity1)
+            $this->thesaurusService->getSynonyms('test')
         );
     }
 }

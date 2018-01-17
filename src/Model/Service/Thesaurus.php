@@ -26,26 +26,13 @@ class Thesaurus
     /**
      * Get synonyms.
      *
-     * @param WordEntity\Word $wordEntity
+     * @param string $word
      * @return WordEntity\Word[]
      */
     public function getSynonyms(
-        WordEntity\Word $wordEntity
+        string $word
     ) : array {
-        try {
-            $thesaurusUpdated = $this->wordTable->selectThesaurusUpdatedWhereWordId(
-                $wordEntity->wordId
-            );
-        } catch (Exception $exception) {
 
-        }
-        if ($thesaurusUpdated ?? null) {
-            return $this->getSynonymsFromMySql($wordEntity);
-        }
-
-        $this->wordTable->updateSetThesaurusUpdatedToNowWhereWordId(
-            $wordEntity->wordId
-        );
         // (insert and get) or (get) every word
         // return all word entities
         return [];
