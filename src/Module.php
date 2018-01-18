@@ -54,14 +54,19 @@ class Module
                         $serviceManager->get(WordTable\Word::class)
                     );
                 },
+                WordService\LettersOnly::class => function ($serviceManager) {
+                    return new WordService\LettersOnly();
+                },
+                WordService\Capitalization::class => function ($serviceManager) {
+                    return new WordService\Capitalization(
+                        $serviceManager->get(WordService\LettersOnly::class)
+                    );
+                },
                 WordService\Word::class => function ($serviceManager) {
                     return new WordService\Word(
                         $serviceManager->get(WordFactory\Word::class),
                         $serviceManager->get(WordTable\Word::class)
                     );
-                },
-                WordService\Word\LettersOnly::class => function ($serviceManager) {
-                    return new WordService\Word\LettersOnly();
                 },
                 WordTable\Api::class => function ($serviceManager) {
                     return new WordTable\Api(

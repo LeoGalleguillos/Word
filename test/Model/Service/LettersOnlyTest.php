@@ -1,5 +1,5 @@
 <?php
-namespace LeoGalleguillos\WordTest\Model\Service\Word;
+namespace LeoGalleguillos\WordTest\Model\Service;
 
 use LeoGalleguillos\Word\Model\Entity as WordEntity;
 use LeoGalleguillos\Word\Model\Service as WordService;
@@ -9,13 +9,13 @@ class LettersOnlyTest extends TestCase
 {
     protected function setUp()
     {
-        $this->lettersOnlyService = new WordService\Word\LettersOnly();
+        $this->lettersOnlyService = new WordService\LettersOnly();
     }
 
     public function testInitialize()
     {
         $this->assertInstanceOf(
-            WordService\Word\LettersOnly::class,
+            WordService\LettersOnly::class,
             $this->lettersOnlyService
         );
     }
