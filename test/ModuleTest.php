@@ -23,17 +23,16 @@ class ModuleTest extends TestCase
         $applicationConfig = include(__DIR__ . '/../config/application.config.php');
         $this->application = Application::init($applicationConfig);
 
-        $localConfig       = include(__DIR__ . '/../config/autoload/local.php');
         $serviceConfig     = $this->module->getServiceConfig();
-
-        $serviceManager = new ServiceManager();
-        $serviceManager->configure($applicationConfig);
+        $serviceManager    = $this->application->getServiceManager();
         $serviceManager->configure($serviceConfig);
-        //$serviceManager->get(\LeoGalleguillos\Word\Model\Service\Thesaurus::class);
 
         $serviceConfigFactories = $serviceConfig['factories'];
         foreach ($serviceConfigFactories as $className => $value) {
-            $this->assertTrue(class_exists($className));
+            $this->assertInstanceOf(
+                $className,
+                $serviceManager->get($className)
+            );
         }
     }
 }
