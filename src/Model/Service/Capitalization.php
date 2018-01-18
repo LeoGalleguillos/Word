@@ -15,7 +15,11 @@ class Capitalization
     public function getCapitalization(
         WordEntity\Word $wordEntity
     ) : WordEntity\Capitalization {
-        $letters = $this->lettersOnly->getLettersOnly($wordEntity);
+        $letters = $this->lettersOnlyService->getLettersOnly($wordEntity);
+
+        if (empty($letters)) {
+            return new WordEntity\Capitalization\Unknown();
+        }
     }
 
     public function setCapitalization(
