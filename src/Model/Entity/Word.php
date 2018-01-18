@@ -19,4 +19,9 @@ class Word
      * Word ID.
      */
     public $wordId;
+
+    public function __toString() : string
+    {
+        return (string) $this->word;
+    }
 }

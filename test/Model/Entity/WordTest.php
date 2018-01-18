@@ -15,4 +15,20 @@ class WordTest extends TestCase
     {
         $this->assertInstanceOf(WordEntity\Word::class, $this->wordEntity);
     }
+
+    public function testToString()
+    {
+        $wordEntity = new WordEntity\Word();
+        $this->assertSame(
+            '',
+            (string) $wordEntity
+        );
+
+        $wordEntity->wordId = 123;
+        $wordEntity->word   = 'hello';
+        $this->assertSame(
+            'hello',
+            (string) $wordEntity
+        );
+    }
 }
