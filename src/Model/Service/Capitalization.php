@@ -39,6 +39,19 @@ class Capitalization
         WordEntity\Word $wordEntity,
         WordEntity\Capitalization $capitalizationEntity
     ) {
+        switch (get_class($capitalizationEntity)) {
+            case WordEntity\Capitalization\Capitalized::class:
+                $wordEntity->word = strtolower($wordEntity->word);
+                $wordEntity->word = ucfirst($wordEntity->word);
+                break;
+            case WordEntity\Capitalization\Lowercase::class:
+                $wordEntity->word = strtolower($wordEntity->word);
+                break;
+            case WordEntity\Capitalization\Uppercase::class:
+                $wordEntity->word = strtoupper($wordEntity->word);
+                break;
+        }
 
+        return $wordEntity;
     }
 }

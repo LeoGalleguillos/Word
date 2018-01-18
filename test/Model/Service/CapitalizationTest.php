@@ -76,4 +76,95 @@ class CapitalizationTest extends TestCase
             $this->capitalizationService->getCapitalization($wordEntity)
         );
     }
+
+    public function testSetCapitalization()
+    {
+        $wordEntity = new WordEntity\Word();
+        $wordEntity->word = 'HELLO';
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Lowercase()
+        );
+        $this->assertSame(
+            'hello',
+            $wordEntity->word
+        );
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Uppercase()
+        );
+        $this->assertSame(
+            'HELLO',
+            $wordEntity->word
+        );
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Capitalized()
+        );
+        $this->assertSame(
+            'Hello',
+            $wordEntity->word
+        );
+
+        $wordEntity->word = 'A!@#a';
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Lowercase()
+        );
+        $this->assertSame(
+            'a!@#a',
+            $wordEntity->word
+        );
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Uppercase()
+        );
+        $this->assertSame(
+            'A!@#A',
+            $wordEntity->word
+        );
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Capitalized()
+        );
+        $this->assertSame(
+            'A!@#a',
+            $wordEntity->word
+        );
+
+        $wordEntity->word = '';
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Lowercase()
+        );
+        $this->assertSame(
+            '',
+            $wordEntity->word
+        );
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Uppercase()
+        );
+        $this->assertSame(
+            '',
+            $wordEntity->word
+        );
+
+        $this->capitalizationService->setCapitalization(
+            $wordEntity,
+            new WordEntity\Capitalization\Capitalized()
+        );
+        $this->assertSame(
+            '',
+            $wordEntity->word
+        );
+    }
 }
