@@ -24,4 +24,56 @@ class CapitalizationTest extends TestCase
             $this->capitalizationService
         );
     }
+
+    public function testGetCapitalization()
+    {
+        $wordEntity = new WordEntity\Word();
+
+        $this->lettersOnlyServiceMock->method('getLettersOnly')->will(
+            $this->onConsecutiveCalls(
+                '', 'a', 'z', 'abc', 'aBc', 'aBC', 'Abc', 'AbC', 'A', 'ABC'
+            )
+        );
+
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Unknown::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Lowercase::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Lowercase::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Lowercase::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Lowercase::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Lowercase::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Capitalized::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Capitalized::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Uppercase::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+        $this->assertInstanceOf(
+            WordEntity\Capitalization\Uppercase::class,
+            $this->capitalizationService->getCapitalization($wordEntity)
+        );
+    }
 }

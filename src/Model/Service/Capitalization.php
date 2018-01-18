@@ -20,6 +20,19 @@ class Capitalization
         if (empty($letters)) {
             return new WordEntity\Capitalization\Unknown();
         }
+
+        if (ctype_lower($letters[0])) {
+            return new WordEntity\Capitalization\Lowercase();
+        }
+
+        $letters = str_split($letters);
+        foreach ($letters as $letter) {
+            if (ctype_lower($letter)) {
+                return new WordEntity\Capitalization\Capitalized();
+            }
+        }
+
+        return new WordEntity\Capitalization\Uppercase();
     }
 
     public function setCapitalization(
