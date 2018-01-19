@@ -37,6 +37,11 @@ class Module
                         $serviceManager->get(WordTable\Api::class)
                     );
                 },
+                WordService\Synonym::class => function ($serviceManager) {
+                    return new WordService\Synonym(
+                        $serviceManager->get(WordService\Thesaurus::class)
+                    );
+                },
                 WordService\Thesaurus::class => function ($serviceManager) {
                     return new WordService\Thesaurus(
                         $serviceManager->get(WordFactory\Word::class),
