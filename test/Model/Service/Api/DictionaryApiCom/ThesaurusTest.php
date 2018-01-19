@@ -53,6 +53,11 @@ class ThesaurusTest extends TestCase
 
     public function testGetSynonyms()
     {
+        $this->assertSame(
+            [],
+            $this->thesaurusApi->getSynonyms('3')
+        );
+
         $synonyms = [
             'essay',
             'experimentation',

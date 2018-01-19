@@ -25,10 +25,13 @@ class Thesaurus
      */
     public function getSynonyms(string $word) : array
     {
-        $synonyms = [];
-
         $simpleXmlElement = $this->getSimpleXmlElement($word);
         $entry            = $simpleXmlElement->{'entry'};
+        if (!isset($entry->{'sens'})) {
+            return [];
+        }
+
+        $synonyms         = [];
         $sense            = $entry->{'sens'};
         $synonymsString   = (string) $sense->{'syn'};
         $synonymsArray    = explode(', ', $synonymsString);
