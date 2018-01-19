@@ -37,9 +37,19 @@ class Module
                         $serviceManager->get(WordTable\Api::class)
                     );
                 },
+                WordService\Capitalization::class => function ($serviceManager) {
+                    return new WordService\Capitalization(
+                        $serviceManager->get(WordService\LettersOnly::class)
+                    );
+                },
+                WordService\LettersOnly::class => function ($serviceManager) {
+                    return new WordService\LettersOnly();
+                },
                 WordService\Synonym::class => function ($serviceManager) {
                     return new WordService\Synonym(
-                        $serviceManager->get(WordService\Thesaurus::class)
+                        $serviceManager->get(WordService\Capitalization::class),
+                        $serviceManager->get(WordService\Thesaurus::class),
+                        $serviceManager->get(WordService\Word::class)
                     );
                 },
                 WordService\Thesaurus::class => function ($serviceManager) {
@@ -57,14 +67,6 @@ class Module
                         $serviceManager->get(WordFactory\Word::class),
                         $serviceManager->get(WordTable\Thesaurus::class),
                         $serviceManager->get(WordTable\Word::class)
-                    );
-                },
-                WordService\LettersOnly::class => function ($serviceManager) {
-                    return new WordService\LettersOnly();
-                },
-                WordService\Capitalization::class => function ($serviceManager) {
-                    return new WordService\Capitalization(
-                        $serviceManager->get(WordService\LettersOnly::class)
                     );
                 },
                 WordService\Word::class => function ($serviceManager) {

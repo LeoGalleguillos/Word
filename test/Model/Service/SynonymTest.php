@@ -14,11 +14,19 @@ class SynonymTest extends TestCase
 {
     protected function setUp()
     {
+        $this->capitalizationService = new WordService\Capitalization(
+            new WordService\LettersOnly()
+        );
         $this->thesaurusServiceMock = $this->createMock(
             WordService\Thesaurus::class
         );
+        $this->wordServiceMock = $this->createMock(
+            WordService\Word::class
+        );
         $this->synonymService = new WordService\Synonym(
-            $this->thesaurusServiceMock
+            $this->capitalizationService,
+            $this->thesaurusServiceMock,
+            $this->wordServiceMock
         );
 
         $this->wordEntity1         = new WordEntity\Word();
@@ -77,5 +85,45 @@ class SynonymTest extends TestCase
                 $this->synonymService->getSynonym('test', 2)
             );
         }
+    }
+
+    public function testGetSynonymWithCapitalization()
+    {
+        $this->thesaurusServiceMock->method('getSynonyms')->will(
+            $this->onConsecutiveCalls(
+                [], $this->wordEntities, $this->wordEntities, $this->wordEntities
+            )
+        );
+        $this->wordServiceMock->method('getEntityFromString')->willReturn(
+            $this->wordEntity1
+        );
+
+        try {
+            $this->synonymService->getSynonymWithCapitalization('test', 3)->word;
+            $this->fail();
+        } catch (Exception $exception) {
+            $this->assertSame(
+                'Unable to get synonyms.',
+                $exception->getMessage()
+            );
+        }
+
+        $this->wordEntity1->word = 'test';
+        $this->assertSame(
+            'essay',
+            $this->synonymService->getSynonymWithCapitalization('test', 3)->word
+        );
+
+        $this->wordEntity1->word = 'Test';
+        $this->assertSame(
+            'Essay',
+            $this->synonymService->getSynonymWithCapitalization('Test', 3)->word
+        );
+
+        $this->wordEntity1->word = 'TEST';
+        $this->assertSame(
+            'ESSAY',
+            $this->synonymService->getSynonymWithCapitalization('TEST', 3)->word
+        );
     }
 }

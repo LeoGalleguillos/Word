@@ -11,9 +11,13 @@ class Synonym
      * Construct.
      */
     public function __construct(
-        WordService\Thesaurus $thesaurusService
+        WordService\Capitalization $capitalizationService,
+        WordService\Thesaurus $thesaurusService,
+        WordService\Word $wordService
     ) {
-        $this->thesaurusService = $thesaurusService;
+        $this->capitalizationService = $capitalizationService;
+        $this->thesaurusService      = $thesaurusService;
+        $this->wordService           = $wordService;
     }
 
     /**
@@ -21,7 +25,8 @@ class Synonym
      *
      * @param string $word
      * @param int $dividend
-     * @return WordEntity\Word[]
+     * @return WordEntity\Word
+     * @throws Exception
      */
     public function getSynonym(
         string $word,
@@ -36,5 +41,28 @@ class Synonym
         $divisor = count($synonyms);
         $index   = $dividend % $divisor;
         return $synonyms[$index];
+    }
+
+    /**
+     * Get synonym.
+     *
+     * @param string $word
+     * @param int $dividend
+     * @return WordEntity\Word
+     * @throws Exception
+     */
+    public function getSynonymWithCapitalization(
+        string $word,
+        int $dividend
+    ) {
+        $synonym        = $this->getSynonym($word, $dividend);
+        $wordEntity     = $this->wordService->getEntityFromString($word);
+        $capitalization = $this->capitalizationService->getCapitalization($wordEntity);
+        $synonym        = $this->capitalizationService->setCapitalization(
+            $synonym,
+            $capitalization
+        );
+
+        return $synonym;
     }
 }
