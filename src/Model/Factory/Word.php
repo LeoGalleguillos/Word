@@ -28,8 +28,10 @@ class Word
 
     public function buildFromWord(string $word) : WordEntity\Word
     {
-        return $this->buildFromArrayObject(
+        $wordEntity = $this->buildFromArrayObject(
             $this->wordTable->selectWhereWord($word)
         );
+        $wordEntity->word = $word;
+        return $wordEntity;
     }
 }
